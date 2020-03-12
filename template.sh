@@ -17,7 +17,7 @@ declare -r _red_="\e[31m"
 
 # Bootstrap
 
-if [ "`getopt --longoptions debug -- d "$@" 2> /dev/null | grep "\(\d\|\-\-debug\)"`" != "" ] ; then
+if [ "`getopt --longoptions debug -- d "$@" 2> /dev/null | grep "\(\-d\|\-\-debug\)"`" != "" ] ; then
     declare -r __DEBUG__=1
     set -o xtrace
 else
