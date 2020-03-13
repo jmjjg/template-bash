@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+# ==============================================================================
 # "Library"
-# ---------
+# ==============================================================================
 
 set -o errexit
 set -o nounset
@@ -17,11 +18,11 @@ declare -r _red_="\e[31m"
 
 # Bootstrap
 
-if [ "`getopt --longoptions debug -- d "$@" 2> /dev/null | grep "\(\-d\|\-\-debug\)"`" != "" ] ; then
-    declare -r __DEBUG__=1
+if [ "`getopt --longoptions xtrace -- x "$@" 2> /dev/null | grep "\(\-x\|\-\-xtrace\)"`" != "" ] ; then
+    declare -r __XTRACE__=1
     set -o xtrace
 else
-    declare -r __DEBUG__=0
+    declare -r __XTRACE__=0
 fi
 
 declare -r __PID__="${$}"
@@ -63,10 +64,13 @@ __trap_exit__()
 trap "__trap_signals__" SIGHUP SIGINT SIGQUIT SIGTERM
 trap "__trap_exit__" EXIT
 
+# ==============================================================================
 # Custom code
-# -----------
+# ==============================================================================
 
+# ------------------------------------------------------------------------------
 # Usage function
+# ------------------------------------------------------------------------------
 
 __usage__()
 {
@@ -80,28 +84,30 @@ __usage__()
     # printf "\nCOMMANDS\n"
     # printf "  <name>\t<description>\n"
     printf "\nOPTIONS\n"
-    printf "  -d|--debug\t<description> (set -o xtrace)\n"
-    printf "  -h|--help\t<description>\n"
+    printf "  -h|--help\tShow this help message\n"
+    printf "  -x|--xtrace\tEnable xtrace\n"
     printf "\nEXEMPLES\n"
     printf "  %s -h\n" "$__SCRIPT__"
 }
 
+# ------------------------------------------------------------------------------
 # Main function
+# ------------------------------------------------------------------------------
 
 __main__()
 {
     (
         # Options
-        opts=$(getopt --longoptions debug,help -- dh "$@") || (__usage__ >&2 ; exit 1)
+        opts=$(getopt --longoptions help,xtrace -- hx "$@") || (__usage__ >&2 ; exit 1)
         eval set -- "$opts"
         while true; do
             case "${1}" in
-                -d|--debug)
-                    shift
-                    ;;
                 -h|--help)
                     __usage__
                     exit 0
+                    ;;
+                -x|--xtrace)
+                    shift
                     ;;
                 --)
                     shift
