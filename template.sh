@@ -25,7 +25,7 @@ declare -r _bg_red_="\e[41m"
 # Bootstrap
 # ----------------------------------------------------------------------------------------------------------------------
 
-if [ "$(getopt --longoptions xtrace -- x "$@" 2> /dev/null | grep --color=none "\(\-x\|\-\-xtrace\)")" != "" ]; then
+if [ "$(getopt --longoptions xtrace -- x "$@" 2> /dev/null | grep --color=none "\(^\|\s\)\(\-x\|\-\-xtrace\)\($\|\s\)")" != "" ]; then
     declare -r __XTRACE__=1
     set -o xtrace
 else
